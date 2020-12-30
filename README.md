@@ -1,6 +1,7 @@
 # Arquitetura-de-Computadores
 Algoritmos desenvolvidos na disciplina Arquitetura de Computadores I em MIPS Assembly
 
+calc_intregral_procedimento: faz o cálculo de uma integral pelo método dos trapézios
 
 fibonacci: código que calcula e apresenta os 9 termos de uma série de fibonacci
 
