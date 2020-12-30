@@ -1,0 +1,76 @@
+ .data    
+fx: .word   0 : 9        # "array" of 8 words to contain f(x) values
+
+ .text
+ 
+ la $t0,fx
+ 
+ addi  $t2, $zero, 4  
+ sw   $t2, 0($t0)      # F[0] = 4
+ 
+ addi  $t2,$zero , 11 
+ sw   $t2, 4($t0)      # F[1] = 11
+ 
+ add  $t2,  $zero, 16  
+ sw   $t2, 8($t0)      # F[2] = 16
+ 
+ add  $t2, $zero, 19  
+ sw   $t2, 12($t0)      # F[3] = 19
+ 
+ add  $t2,$zero, 20
+ sw   $t2, 16($t0)      # F[4] = 20
+ 
+ add  $t2, $zero  , 19
+ sw   $t2, 20($t0)      # F[5] = 19
+ 
+ add  $t2, $zero  , 16
+ sw   $t2, 24($t0)      # F[6] = 16
+
+ add  $t2, $zero , 11 
+ sw   $t2, 28($t0)      # F[7] = 11
+ 
+ add  $t2, $zero, 4  
+ sw   $t2, 32($t0)      # F[8] = 4
+ 
+  add  $t2, $zero, 3  
+ sw   $t2, 36($t0)      # F[8] = 4
+
+addi $t2,$zero,0  #limpando $t2 antes de usar novamento
+
+move $a0, $t0  #passando endereço do vetor como parâmetro
+
+jal calc_integral
+
+move $t6, $v0
+
+ #### APRESENTAR RESULTADO ####
+  li $v0,1
+  move $a0,$t6
+  syscall
+  li $v0,10
+  syscall  
+  
+  
+calc_integral: 
+addi $t1, $zero, 8    #contador que vai ser usado no loop de multiplicação
+addi $t2,$zero, 10
+loop_mult: lw $t5, 4($a0)  #carrega f(1) 
+      sll $t5,$t5,1  #multiplica
+      sw $t5, 4($a0)   #armazena 2*f(1) no vetor
+      addi $a0, $a0, 4   #incrementa a posição do vetor
+      addi $t1, $t1, -1  #decrementa contador
+       bgtz $t1, loop_mult  #se i!=0, volta para o loop de multiplicação
+       
+ la $a0,fx   
+ 
+loop_soma:  lw $t3,0($a0)  #carrega primeira posiçao do vetor
+  add $t4, $t3, $t4   #$t4 recebe valor da soma
+  addi $a0, $a0, 4   #incrementa a posição do vetor
+  addi $t2, $t2, -1   #decrementa contador do loop
+  bgtz $t2, loop_soma  #se contador !=0, volta para o loop de soma
+  
+  srl $t4,$t4,1  #faz a divisão
+  
+  add $v0,$zero,$t4 #para $t4 para v0 para ser retornado 	
+  jr $ra 
+      
